@@ -1,0 +1,5 @@
+https://portswigger.net/web-security/access-control/lab-unprotected-admin-functionality
+https://portswigger.net/web-security/llm-attacks/lab-exploiting-llm-apis-with-excessive-agency
+https://portswigger.net/web-security/api-testing/lab-exploiting-api-endpoint-using-documentation
+https://portswigger.net/web-security/ssrf/lab-basic-ssrf-against-backend-system
+https://portswigger.net/web-security/information-disclosure/exploiting/lab-infoleak-via-backup-files
