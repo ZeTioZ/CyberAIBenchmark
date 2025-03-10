@@ -1,4 +1,5 @@
 import json
+import args_parser
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
@@ -112,7 +113,7 @@ def send_request(message: str, model: str="hermes-3-llama-3.2-3b", llm_url: str=
 		return {"Error while sending request to the LLM model": str(e)}
 
 
-def benchmark(models: list=[], urls: list=[]) -> None:
+def benchmark(models: list=[], urls: list=[], llm_url: str="http://127.0.0.1:1234/v1/chat/completions", output: str="output") -> None:
 	scrapped_datas = []
 	for url in urls:
 		title, data = scrape_info(url)
@@ -121,7 +122,7 @@ def benchmark(models: list=[], urls: list=[]) -> None:
 	data = []
 	for model in models:
 		for scrapped_data in scrapped_datas:
-			response = send_request(scrapped_data.get_data(), model)
+			response = send_request(scrapped_data.get_data(), model, llm_url)
 			bot_response = response.get("choices")[0].get("message").get("content") if response.get("choices") else "No response from the model"
 			data.append({
 				"Model": model,
@@ -131,13 +132,16 @@ def benchmark(models: list=[], urls: list=[]) -> None:
 				"AI Response": bot_response
 			})
 	df = pd.DataFrame(data)
-	df.to_excel("output.xlsx", index=False)
+	df.to_excel(f"{output}.xlsx", index=False)
 	print("Excel file has been created successfully!")
 
 
 if __name__ == "__main__":
-	models = ["hermes-3-llama-3.2-3b"]
-	urls = []
-	with open ("links.txt", "r") as links_file:
+	args = args_parser.parse_args()
+
+	with open(args.models, "r") as models_file:
+		models = models_file.read().splitlines()
+
+	with open(args.links, "r") as links_file:
 		urls = links_file.read().splitlines()
-	benchmark(models, urls)
+	benchmark(models, urls, args.lllm_url)
