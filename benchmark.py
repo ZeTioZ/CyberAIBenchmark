@@ -121,7 +121,10 @@ def benchmark(models: list=[], urls: list=[], llm_url: str="http://127.0.0.1:123
 
 	data = []
 	for model in models:
-		for scrapped_data in scrapped_datas:
+		print(f"Running benchmark for model: {model}")
+		start_time = pd.Timestamp.now()
+		for index, scrapped_data in enumerate(scrapped_datas):
+			print(f"Running benchmark for challenge: {scrapped_data.get_title()} ({index+1}/{len(scrapped_datas)})")
 			response = send_request(scrapped_data.get_data(), model, llm_url)
 			bot_response = response.get("choices")[0].get("message").get("content") if response.get("choices") else "No response from the model"
 			data.append({
