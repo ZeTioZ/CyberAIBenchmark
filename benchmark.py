@@ -1,8 +1,8 @@
 import json
-import args_parser
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+from args_parser import ArgumentsParser
 
 from scrapped_data import ScrappedData
 
@@ -137,11 +137,11 @@ def benchmark(models: list=[], urls: list=[], llm_url: str="http://127.0.0.1:123
 
 
 if __name__ == "__main__":
-	args = args_parser.parse_args()
+	args = ArgumentsParser().parse_args()
 
 	with open(args.models, "r") as models_file:
 		models = models_file.read().splitlines()
 
 	with open(args.links, "r") as links_file:
 		urls = links_file.read().splitlines()
-	benchmark(models, urls, args.lllm_url)
+	benchmark(models, urls, args.llm_url)
