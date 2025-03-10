@@ -1,0 +1,5 @@
+hermes-3-llama-3.2-3b
+text-embedding-nomic-embed-text-v1.5
+segolilylabs_-_lily-cybersecurity-7b-v0.2
+deepseek-coder-v2-lite-instruct
+deepseek-r1-distill-qwen-7b
