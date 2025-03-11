@@ -165,13 +165,13 @@ def benchmark(preload_model: bool=False, models: list=[], urls: list=[], llm_pro
 			print(f"Running benchmark for challenge: {scrapped_data.get_title()} ({data_index+1}/{len(scrapped_datas)})")
 			response = send_prompt(scrapped_data.get_data(), model, llm_prompt_url)
 			bot_response = response.get("choices")[0].get("message").get("content") if response.get("choices") else "No response from the model"
-		data.append({
-			"Model": model,
-			"URL": scrapped_data.get_url(),
-			"Title": scrapped_data.get_title(),
-			"Data": scrapped_data.get_data(),
-			"AI Response": bot_response
-		})
+			data.append({
+				"Model": model,
+				"URL": scrapped_data.get_url(),
+				"Title": scrapped_data.get_title(),
+				"Data": scrapped_data.get_data(),
+				"AI Response": bot_response
+			})
 		end_time = timer()
 		total_time += end_time-start_time
 		print(f"Benchmark for model: {model} completed in {end_time-start_time:.2f} seconds")
