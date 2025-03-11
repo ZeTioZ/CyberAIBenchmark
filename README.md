@@ -28,7 +28,7 @@ Open the local llm processing server with the models you want. It's best to use 
 Execute the Python script to start the benchmarking process with the following command:
 
 ```bash
-python benchmark.py -m .\path\to\models.txt -l .\path\to\links.txt -llm_url http://127.0.0.1:1234/v1/chat/completions -o output
+python benchmark.py -m .\path\to\models.txt -l .\path\to\links.txt -llm_prompt_url http://127.0.0.1:1234/v1/chat/completions -llm_get_models_url http://localhost:1234/api/v0/models/ -preload -o output
 ```
 
 ### 3. Output
@@ -44,8 +44,9 @@ python benchmark.py -m .\path\to\models.txt -l .\path\to\links.txt -llm_url http
 
 ## Code Structure
 - `scrape_info(url)`: Extracts structured content from a given URL.
-- `send_request(message, model, llm_url)`: Sends a request to an AI model and retrieves its response.
-- `benchmark(models, urls, llm_url, output)`: Orchestrates the benchmarking process, storing results in an Excel file.
+- `send_prompt(message, model, llm_prompt_url)`: Sends a prompt request to an AI model and retrieves its answer.
+- `load_model(model, llm_prompt_url, llm_get_models_url)`: Sends a request to the llm server to force load a model (only works if you're using a JIT Model Loader).
+- `benchmark(preload_model, models, urls, llm_prompt_url, llm_get_models_url, output)`: Orchestrates the benchmarking process, storing results in an Excel file.
 - `main`: Reads URLs from `links.txt`, defines models from `models.txt`, and calls `benchmark()`.
 
 ## Notes
