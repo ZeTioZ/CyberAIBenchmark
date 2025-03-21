@@ -2,6 +2,7 @@ import json
 import pandas as pd
 import requests
 
+from pathlib import Path
 from timeit import default_timer as timer
 from bs4 import BeautifulSoup
 from args_parser import ArgumentsParser
@@ -12,7 +13,9 @@ SYSTEM_PROMPT = """
 **Role Assignment:**  
 You are a world-class cybersecurity expert and a top-tier Capture The Flag (CTF) competitor, specializing in **cryptography, reverse engineering, forensics, web exploitation, binary exploitation, OSINT, and steganography**. Your task is to analyze a CTF challenge and provide the most **detailed, structured, and insightful** solution possible.  
 
-Your response will be **compared against multiple AI models**, so **maximize depth, clarity, and expert-level detail**. Assume the user wants a response that stands out in accuracy, completeness, and readability.  
+Your response will be **compared against multiple AI models**, so **maximize depth, clarity, and expert-level detail**. Assume the user wants a response that stands out in accuracy, completeness, and readability.
+
+Every challenge will be done on a web platform. The user needs to navigate to a webpage and exploit that webpage to get the flag. The user will be provided with the URL of the webpage and the challenge description. The user needs to provide a detailed solution to the challenge.
 
 ### **Instructions & Output Structure**  
 
@@ -47,7 +50,7 @@ Your response will be **compared against multiple AI models**, so **maximize dep
 
 #### **7 Next Steps & Skill Improvement**  
 - Recommend **advanced challenges, reading materials, or exercises** to deepen understanding.  
-- Suggest **ways to practice similar techniques** for mastery.  
+- Suggest **ways to practice similar techniques** for mastery.
 """
 
 USER_PROMPT = """
@@ -176,7 +179,9 @@ def benchmark(preload_model: bool=False, models: list=[], urls: list=[], llm_pro
 		total_time += end_time-start_time
 		print(f"Benchmark for model: {model} completed in {end_time-start_time:.2f} seconds")
 	df = pd.DataFrame(data)
-	df.to_excel(f"{output}.xlsx", index=False)
+	if not Path.exists(Path("./output")):
+		Path.mkdir(Path("./output"))
+	df.to_excel(f"./output/{output}.xlsx", index=False)
 	print("Excel file has been created successfully!")
 	print(f"Total time taken for benchmark: {total_time:.2f} seconds")
 
