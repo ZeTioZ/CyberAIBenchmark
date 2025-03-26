@@ -9,6 +9,9 @@ class ArgumentsParser:
 		self.parser.add_argument("-llm_get_models_url", "--llm_get_models_url", default="http://localhost:1234/api/v0/models/", help="URL of the LLM endpoint.")
 		self.parser.add_argument("-o", "--output", default="output", help="Output file name.")
 		self.parser.add_argument("-preload", "--preload", action="store_true", help="Preload the model before sending the prompt request.")
+		self.parser.add_argument("-evaluate", "--evaluate", action="store_true", help="Evaluate the model after sending the prompt request.")
+		self.parser.add_argument("-evaluation_input", "--evaluation_input", default="./output/benchmarking_output.xlsx", help="Input for the evaluation process.")
+		self.parser.add_argument("-no-benchmark", "--no_benchmark", default=False, action="store_true", help="Do not run the benchmark.")
 
 	def parse_args(self):
 		return self.parser.parse_args()
