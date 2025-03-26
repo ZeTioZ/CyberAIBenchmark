@@ -1,13 +1,16 @@
 import json
 import pandas as pd
 import requests
+import sys
 
 from pathlib import Path
 from timeit import default_timer as timer
-from bs4 import BeautifulSoup
 from args_parser import ArgumentsParser
 
-from scrapped_data import ScrappedData
+sys.path.append(str(Path(__file__)))
+
+from objects.scrapped_data import ScrappedData
+from scrappers.scrapper_consumer import ScrapperConsumer
 
 BENCHMARKING_SYSTEM_PROMPT = """
 **Role Assignment:**  
@@ -101,38 +104,6 @@ EVALUATION_USER_PROMPT = """
 **LLM Response:**
 {llm_response}
 """
-
-def scrape_info(url: str) -> tuple:
-	response = requests.get(url)
-	if response.status_code != 200:
-		print("Error while getting the response from the URL: " + url)
-		return None
-	soup = BeautifulSoup(response.text, features="html.parser")
-	
-	sections = soup.find_all('div', class_='section theme-white')
-	title = ""
-	extracted_data = []
-	solution = ""
-	
-	for section in sections:
-		title = section.find('h1', class_='heading-2').get_text(strip=True)
-		label_level_div = section.find('div', class_='container-columns')
-		buttons_left_div = section.find('div', class_='container-buttons-left')
-		solution_div = section.find('div', class_='component-solution expandable-container')
-		
-		if label_level_div and buttons_left_div:
-			extracted_content = []
-			current_element = label_level_div.find_next_sibling()
-			
-			while current_element and current_element != buttons_left_div:
-				extracted_content.append(current_element.get_text(strip=True))
-				current_element = current_element.find_next_sibling()
-				
-			extracted_data.append('\n'.join(extracted_content))
-
-		if solution_div:
-			solution = solution_div.find('div', class_='content').get_text(strip=True)
-	return title, extracted_data, solution
 
 
 def send_benchmarking_prompt(prompt: str, model: str="hermes-3-llama-3.2-3b", llm_url: str="http://127.0.0.1:1234/v1/chat/completions") -> dict:
@@ -235,8 +206,11 @@ def load_model(model: str, llm_prompt_url: str="http://127.0.0.1:1234/v1/chat/co
 
 def benchmark(preload_model: bool=False, models: list=[], urls: list=[], llm_prompt_url: str="http://127.0.0.1:1234/v1/chat/completions", llm_get_models_url: str="http://localhost:1234/api/v0/models/", output: str="benchmarking_output", do_evaluate: bool=False) -> None:
 	scrapped_datas = []
+	scrapper_consumer = ScrapperConsumer()
 	for url in urls:
-		title, data, solution = scrape_info(url)
+		title, data, solution = scrapper_consumer.scrape(url)
+		if title is None:
+			continue
 		scrapped_datas.append(ScrappedData(url, title, ''.join(data), solution))
 	
 	data = []
@@ -269,7 +243,7 @@ def benchmark(preload_model: bool=False, models: list=[], urls: list=[], llm_pro
 	print("Excel file has been created successfully!")
 	print(f"Total time taken for benchmark: {total_time:.2f} seconds")
 	if do_evaluate:
-		evaluate(preload_model, models, urls, llm_prompt_url, llm_get_models_url, f"./output/benchmarking_{output}", f"evaluation_{output}")
+		evaluate(preload_model, models, urls, llm_prompt_url, llm_get_models_url, f"./output/benchmarking_{output}.xlsx", f"{output}")
 
 
 def evaluate(preload_model: bool=False, models: list=[], urls: list=[], llm_prompt_url: str="http://127.0.0.1:1234/v1/chat/completions", llm_get_models_url: str="http://localhost:1234/api/v0/models/", input: str="benchmarking_output", output: str="evaluation_output") -> None:
