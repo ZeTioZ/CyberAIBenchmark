@@ -11,7 +11,8 @@ class ArgumentsParser:
 		self.parser.add_argument("-preload", "--preload", action="store_true", help="Preload the model before sending the prompt request.")
 		self.parser.add_argument("-evaluate", "--evaluate", action="store_true", help="Evaluate the model after sending the prompt request.")
 		self.parser.add_argument("-evaluation_input", "--evaluation_input", default="./output/benchmarking_output.xlsx", help="Input for the evaluation process.")
-		self.parser.add_argument("-no-benchmark", "--no_benchmark", default=False, action="store_true", help="Do not run the benchmark.")
+		self.parser.add_argument("-no_benchmark", "--no_benchmark", default=False, action="store_true", help="Do not run the benchmark.")
+		self.parser.add_argument("-custom_challenges", "--custom_challenges", help="Use json formatted custom challenges.")
 
 	def parse_args(self):
 		return self.parser.parse_args()

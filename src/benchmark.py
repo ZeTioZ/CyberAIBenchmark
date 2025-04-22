@@ -204,7 +204,7 @@ def load_model(model: str, llm_prompt_url: str="http://127.0.0.1:1234/v1/chat/co
 		return {"Error while sending request to the LLM Server": str(e)}
 
 
-def benchmark(preload_model: bool=False, models: list=[], urls: list=[], llm_prompt_url: str="http://127.0.0.1:1234/v1/chat/completions", llm_get_models_url: str="http://localhost:1234/api/v0/models/", output: str="benchmarking_output", do_evaluate: bool=False) -> None:
+def benchmark(preload_model: bool=False, models: list=[], urls: list=[], llm_prompt_url: str="http://127.0.0.1:1234/v1/chat/completions", llm_get_models_url: str="http://localhost:1234/api/v0/models/", output: str="benchmarking_output", do_evaluate: bool=False, custom_challenges: dict={}) -> None:
 	scrapped_datas = []
 	scrapper_consumer = ScrapperConsumer()
 	for url in urls:
@@ -212,7 +212,10 @@ def benchmark(preload_model: bool=False, models: list=[], urls: list=[], llm_pro
 		if title is None:
 			continue
 		scrapped_datas.append(ScrappedData(url, title, ''.join(data), solution))
-	
+
+	for challenge_id, challenge_dict in custom_challenges.items():
+		scrapped_datas.append(ScrappedData(challenge_id, challenge_dict["title"], challenge_dict["description"], challenge_dict["solution"]))
+
 	data = []
 	total_time = 0
 	for model_index, model in enumerate(models):
@@ -243,10 +246,10 @@ def benchmark(preload_model: bool=False, models: list=[], urls: list=[], llm_pro
 	print("Excel file has been created successfully!")
 	print(f"Total time taken for benchmark: {total_time:.2f} seconds")
 	if do_evaluate:
-		evaluate(preload_model, models, urls, llm_prompt_url, llm_get_models_url, f"./output/benchmarking_{output}.xlsx", f"{output}")
+		evaluate(preload_model, models, llm_prompt_url, llm_get_models_url, f"./output/benchmarking_{output}.xlsx", f"{output}")
 
 
-def evaluate(preload_model: bool=False, models: list=[], urls: list=[], llm_prompt_url: str="http://127.0.0.1:1234/v1/chat/completions", llm_get_models_url: str="http://localhost:1234/api/v0/models/", input: str="benchmarking_output", output: str="evaluation_output") -> None:
+def evaluate(preload_model: bool=False, models: list=[], llm_prompt_url: str="http://127.0.0.1:1234/v1/chat/completions", llm_get_models_url: str="http://localhost:1234/api/v0/models/", input: str="benchmarking_output", output: str="evaluation_output") -> None:
 	data = pd.read_excel(input)
 	if 'Title' not in data.columns or 'AI Response' not in data.columns or 'Solution' not in data.columns:
 		print("The required columns ('Title', 'AI Response', 'Solution') are not present in the file.")
@@ -288,14 +291,20 @@ def evaluate(preload_model: bool=False, models: list=[], urls: list=[], llm_prom
 
 if __name__ == "__main__":
 	args = ArgumentsParser().parse_args()
+	models = []
+	urls = []
+	custom_challenges = {}
 
 	with open(args.models, "r") as models_file:
 		models = models_file.read().splitlines()
-
 	with open(args.links, "r") as links_file:
 		urls = links_file.read().splitlines()
+	if args.custom_challenges:
+		with open(args.custom_challenges, "r") as custom_challenges_file:
+			custom_challenges = json.load(custom_challenges_file)
+
 	if not args.no_benchmark:
-		benchmark(args.preload, models, urls, args.llm_prompt_url, args.llm_get_models_url, args.output, args.evaluate)
+		benchmark(args.preload, models, urls, args.llm_prompt_url, args.llm_get_models_url, args.output, args.evaluate, custom_challenges)
 	if args.evaluate and args.no_benchmark:
-		evaluate(args.preload, models, urls, args.llm_prompt_url, args.llm_get_models_url, args.evaluation_input, args.output)
+		evaluate(args.preload, models, args.llm_prompt_url, args.llm_get_models_url, args.evaluation_input, args.output)
 	
