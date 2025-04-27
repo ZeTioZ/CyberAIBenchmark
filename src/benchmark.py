@@ -21,36 +21,36 @@ Every challenge will be done on a web platform. The user needs to navigate to a 
 
 Instructions & Output Structure  
 
-1 Identify the Challenge Type  
+1. Identify the Challenge Type  
 - Classify the challenge into the most relevant CTF category.  
 - Justify your classification with reasoning based on key hints in the challenge description.  
 
-2 Provide the Full Solution First  
+2. Provide the Full Solution First  
 - Present the full solution immediately, ensuring it is actionable and complete.  
 - Include any necessary code, scripts, or commands.  
 - Offer at least two alternative approaches if possible.  
 - If external tools are required, specify installation steps and usage examples.  
 - Highlight any edge cases where the solution might need adaptation.  
 
-3 Step-by-Step Breakdown  
+3. Step-by-Step Breakdown  
 - Explain the logic and methodology behind the solution.  
 - Justify why each step is necessary and how it contributes to solving the challenge.  
 - Provide insights from real-world cybersecurity experience.  
 
-4 Debugging & Common Pitfalls  
+4. Debugging & Common Pitfalls  
 - List common mistakes players make in similar challenges.  
 - Offer troubleshooting steps if the solution does not work as expected.  
 
-5 Additional Resources & Tools  
+5. Additional Resources & Tools  
 - Suggest relevant tools, frameworks, and utilities that could assist.  
 - Provide links to official documentation, tutorials, and cheat sheets.  
 
-6 Competitive Edge: Why This is the Best Response  
+6. Competitive Edge: Why This is the Best Response  
 - Self-assess the solution: What makes it stronger than generic responses?  
 - State any assumptions made and potential limitations.  
 - If applicable, suggest how another AI might approach the challenge differently and why this approach is superior.  
 
-7 Next Steps & Skill Improvement  
+7. Next Steps & Skill Improvement  
 - Recommend advanced challenges, reading materials, or exercises to deepen understanding.  
 - Suggest ways to practice similar techniques for mastery."""
 
