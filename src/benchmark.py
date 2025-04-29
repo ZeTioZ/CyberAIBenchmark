@@ -175,6 +175,7 @@ def load_model(model: str, llm_prompt_url: str="http://127.0.0.1:1234/v1/chat/co
 			{ "role": "system", "content": "This is only to load the model into memory, only respond with 'OK'." },
 			{ "role": "user", "content": "" }
 		],
+		"max_retries": 5,
 		"temperature": 0.7,
 		"max_tokens": -1,
 		"stream": False
