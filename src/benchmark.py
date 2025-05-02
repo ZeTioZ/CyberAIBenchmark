@@ -112,6 +112,8 @@ def send_benchmarking_prompt(prompt: str, model: str="hermes-3-llama-3.2-3b", ll
 			{ "role": "system", "content": BENCHMARKING_SYSTEM_PROMPT },
 			{ "role": "user", "content": BENCHMARKING_USER_PROMPT.format(challenge_description=prompt) }
 		],
+		"web_search_enabled": True,
+		"max_retries": 5,
 		"temperature": 0.7,
 		"max_tokens": -1,
 		"stream": False
@@ -146,6 +148,8 @@ def send_evaluation_prompt(solution: str, llm_response: str, model: str="hermes-
 			{ "role": "system", "content": EVALUATION_SYSTEM_PROMPT },
 			{ "role": "user", "content": EVALUATION_USER_PROMPT.format(reference_solution=solution, llm_response=llm_response) }
 		],
+		"web_search_enabled": True,
+		"max_retries": 5,
 		"temperature": 0.7,
 		"max_tokens": -1,
 		"stream": False
@@ -175,7 +179,6 @@ def load_model(model: str, llm_prompt_url: str="http://127.0.0.1:1234/v1/chat/co
 			{ "role": "system", "content": "This is only to load the model into memory, only respond with 'OK'." },
 			{ "role": "user", "content": "" }
 		],
-		"max_retries": 5,
 		"temperature": 0.7,
 		"max_tokens": -1,
 		"stream": False
