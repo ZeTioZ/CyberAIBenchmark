@@ -19,10 +19,10 @@ pip install -r requirements
 ## Usage
 
 ### 1. Prepare the Input URLs
-Create a file named `links.txt` and `models.txt` in the same directory as the script, or provide the path to them in the arguments. Add the URLs you want to scrape, one per line (PortSwigger links only) inside the links text file and the id of the models you want to test them against in the models text file, one per line also.
+Create a file named `links.txt` and `models.txt` in the same directory as the script, or provide the path to them in the arguments. Add the URLs you want to scrape, one per line (PortSwigger and PentesterLab links only) inside the links text file and the id of the models you want to test them against in the models text file, one per line also.
 
 ### 2. Open Local LLM processing server
-Open the local llm processing server with the models you want. It's best to use "LMStudio" to make the server as they have a JIT Model Loader to change model on the fly.
+Open the local llm processing server with the models you want. It's best to use "LMStudio" to make the server as they have a JIT Model Loader to change model on the fly. The program will send chat completions requests using the OpenAI API format.
 
 ### 3. Run the Script
 Execute the Python script to start the benchmarking process with the following command:
